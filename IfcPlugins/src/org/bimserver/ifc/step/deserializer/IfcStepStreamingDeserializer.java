@@ -302,7 +302,7 @@ public abstract class IfcStepStreamingDeserializer implements StreamingDeseriali
 		}
 	}
 
-	private VirtualObject newVirtualObject(EClass eClass, int lineLength) {
+	private ByteBufferVirtualObject newVirtualObject(EClass eClass, int lineLength) {
 		return new ByteBufferVirtualObject(reusable, eClass, metricCollector.estimateRequiredBytes(lineLength));
 	}
 
@@ -335,7 +335,7 @@ public abstract class IfcStepStreamingDeserializer implements StreamingDeseriali
 			throw new DeserializeException(DeserializerErrorCode.UNKNOWN_ENTITY, lineNumber, name + " is not a known entity");
 		}
 		
-		VirtualObject object = newVirtualObject(eClass, line.length());
+		ByteBufferVirtualObject object = newVirtualObject(eClass, line.length());
 
 		AtomicInteger atomicInteger = summaryMap.get(eClass.getName());
 		if (atomicInteger == null) {
@@ -408,7 +408,13 @@ public abstract class IfcStepStreamingDeserializer implements StreamingDeseriali
 									if (eStructuralFeature instanceof EAttribute) {
 										object.setAttribute((EAttribute) eStructuralFeature, converted);
 									} else {
-										object.setReference((EReference) eStructuralFeature, (WrappedVirtualObject)converted);
+                                        if(converted instanceof ByteBufferList){
+											assert ((ByteBufferList) converted).eClass().getEStructuralFeature(WRAPPED_VALUE).isMany();
+                                            object.setReference((EReference) eStructuralFeature, (ByteBufferList) converted);
+                                        } else {
+											assert ! ((ByteBufferWrappedVirtualObject) converted).eClass().getEStructuralFeature(WRAPPED_VALUE).isMany();
+                                            object.setReference((EReference) eStructuralFeature, (WrappedVirtualObject)converted); // TODO the culprit here - converted is ByteBufferList for many-valued wrapped values
+                                        }
 									}
 								}
 								if (eStructuralFeature.getEType() == EcorePackage.eINSTANCE.getEDouble()) {
