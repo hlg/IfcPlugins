@@ -28,6 +28,7 @@ import org.bimserver.plugins.PluginContext;
 import org.bimserver.plugins.serializers.AbstractSerializerPlugin;
 import org.bimserver.shared.exceptions.PluginException;
 
+@Deprecated
 public abstract class IfcXmlSerializerPlugin extends AbstractSerializerPlugin {
 
 	@Override

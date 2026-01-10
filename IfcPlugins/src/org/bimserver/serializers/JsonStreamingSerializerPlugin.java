@@ -17,7 +17,6 @@ package org.bimserver.serializers;
  * along with this program.  If not, see {@literal<http://www.gnu.org/licenses/>}.
  *****************************************************************************/
 
-import java.util.HashSet;
 import java.util.Set;
 
 import org.bimserver.emf.Schema;
@@ -90,21 +89,16 @@ public class JsonStreamingSerializerPlugin implements StreamingSerializerPlugin 
 
 	@Override
 	public Set<Schema> getSupportedSchemas() {
-		Set<Schema> schemas = new HashSet<>();
-		schemas.add(Schema.IFC2X3TC1);
-		schemas.add(Schema.IFC4);
-		return schemas;
+		return Schema.getIfcSchemas();
 	}
 
 	@Override
 	public String getOutputFormat(Schema schema) {
-		switch (schema) {
-		case IFC2X3TC1:
-			return "IFC_JSON_2X3TC1";
-		case IFC4:
-			return "IFC_JSON_4";
-		default:
-			return null;
-		}
+        return switch (schema) {
+            case IFC2X3TC1 -> "IFC_JSON_2X3TC1";
+            case IFC4 -> "IFC_JSON_4";
+			case IFC4X3 -> "IFC_JSON_4X3";
+            default -> null;
+        };
 	}
 }

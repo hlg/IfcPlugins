@@ -1,4 +1,4 @@
-package org.bimserver.ifc.xml.serializer;
+package org.bimserver.ifc.step.serializer;
 
 /******************************************************************************
  * Copyright (C) 2009-2019  BIMserver.org
@@ -17,27 +17,27 @@ package org.bimserver.ifc.xml.serializer;
  * along with this program.  If not, see {@literal<http://www.gnu.org/licenses/>}.
  *****************************************************************************/
 
-import java.util.Set;
-
 import org.bimserver.emf.Schema;
 import org.bimserver.plugins.PluginConfiguration;
-import org.bimserver.plugins.serializers.Serializer;
+import org.bimserver.plugins.SchemaName;
+import org.bimserver.plugins.serializers.StreamingSerializer;
 
-@Deprecated
-public class IfcXml2x3tc1SerializerPlugin extends IfcXmlSerializerPlugin {
+import java.util.Set;
+
+public class Ifc4x3StepStreamingSerializerPlugin extends IfcStepStreamingSerializerPlugin {
 
 	@Override
-	public Set<Schema> getSupportedSchemas() {
-		return Schema.IFC2X3TC1.toSet();
+	public StreamingSerializer createSerializer(PluginConfiguration pluginConfiguration) {
+		return new Ifc4x3StepStreamingSerializer(pluginConfiguration);
 	}
 
 	@Override
-	public Serializer createSerializer(PluginConfiguration plugin) {
-		return new IfcXml2x3tc1Serializer();
+	public Set<Schema> getSupportedSchemas() {
+		return Schema.IFC4X3.toSet();
 	}
 
 	@Override
 	public String getOutputFormat(Schema schema) {
-		return "IFC_XML_2x3TC1";
+		return SchemaName.IFC_STEP_4X3.name();
 	}
 }

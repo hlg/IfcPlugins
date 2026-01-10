@@ -23,6 +23,7 @@ import org.bimserver.emf.Schema;
 import org.bimserver.plugins.PluginConfiguration;
 import org.bimserver.plugins.serializers.Serializer;
 
+@Deprecated
 public class IfcXml4SerializerPlugin extends IfcXmlSerializerPlugin {
 
 	@Override

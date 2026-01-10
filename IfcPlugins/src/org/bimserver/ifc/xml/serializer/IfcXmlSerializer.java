@@ -57,6 +57,7 @@ import nl.tue.buildingsmart.schema.ListType;
 import nl.tue.buildingsmart.schema.RealType;
 import nl.tue.buildingsmart.schema.SetType;
 
+@Deprecated
 public abstract class IfcXmlSerializer extends IfcSerializer {
 
 	private PrintWriter out;

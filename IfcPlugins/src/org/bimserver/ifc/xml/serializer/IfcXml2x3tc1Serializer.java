@@ -21,6 +21,7 @@ import org.bimserver.emf.IfcModelInterface;
 import org.bimserver.plugins.serializers.ProjectInfo;
 import org.bimserver.plugins.serializers.SerializerException;
 
+@Deprecated
 public class IfcXml2x3tc1Serializer extends IfcXmlSerializer {
 	@Override
 	public void init(IfcModelInterface model, ProjectInfo projectInfo, boolean normalizeOids) throws SerializerException {

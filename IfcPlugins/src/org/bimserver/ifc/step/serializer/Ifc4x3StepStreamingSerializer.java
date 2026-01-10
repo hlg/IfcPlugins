@@ -1,4 +1,4 @@
-package org.bimserver.ifc.xml.serializer;
+package org.bimserver.ifc.step.serializer;
 
 /******************************************************************************
  * Copyright (C) 2009-2019  BIMserver.org
@@ -17,27 +17,23 @@ package org.bimserver.ifc.xml.serializer;
  * along with this program.  If not, see {@literal<http://www.gnu.org/licenses/>}.
  *****************************************************************************/
 
-import java.util.Set;
-
-import org.bimserver.emf.Schema;
+import org.bimserver.emf.PackageMetaData;
+import org.bimserver.models.store.IfcHeader;
 import org.bimserver.plugins.PluginConfiguration;
-import org.bimserver.plugins.serializers.Serializer;
+import org.bimserver.plugins.PluginManagerInterface;
+import org.bimserver.plugins.serializers.ObjectProvider;
+import org.bimserver.plugins.serializers.ProjectInfo;
+import org.bimserver.plugins.serializers.SerializerException;
 
-@Deprecated
-public class IfcXml2x3tc1SerializerPlugin extends IfcXmlSerializerPlugin {
+public class Ifc4x3StepStreamingSerializer extends IfcStepStreamingSerializer {
 
-	@Override
-	public Set<Schema> getSupportedSchemas() {
-		return Schema.IFC2X3TC1.toSet();
+	public Ifc4x3StepStreamingSerializer(PluginConfiguration pluginConfiguration) {
+		super(pluginConfiguration);
 	}
-
+	
 	@Override
-	public Serializer createSerializer(PluginConfiguration plugin) {
-		return new IfcXml2x3tc1Serializer();
-	}
-
-	@Override
-	public String getOutputFormat(Schema schema) {
-		return "IFC_XML_2x3TC1";
+	public void init(ObjectProvider objectProvider, ProjectInfo projectInfo, IfcHeader ifcHeader, PluginManagerInterface pluginManager, PackageMetaData packageMetaData) throws SerializerException {
+		setHeaderSchema("IFC4X3");
+		super.init(objectProvider, projectInfo, ifcHeader, pluginManager, packageMetaData);
 	}
 }
