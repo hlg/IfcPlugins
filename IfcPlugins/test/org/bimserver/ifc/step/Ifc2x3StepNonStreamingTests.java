@@ -1,4 +1,4 @@
-package org.bimserver.test;
+package org.bimserver.ifc.step;
 
 /******************************************************************************
  * Copyright (C) 2009-2019  BIMserver.org
@@ -21,7 +21,6 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Paths;
 import java.util.List;
@@ -33,20 +32,18 @@ import org.bimserver.emf.PackageMetaData;
 import org.bimserver.emf.Schema;
 import org.bimserver.ifc.step.deserializer.Ifc2x3tc1StepDeserializer;
 import org.bimserver.ifc.step.serializer.Ifc2x3tc1StepSerializer;
-import org.bimserver.models.ifc2x3tc1.Ifc2x3tc1Package;
-import org.bimserver.models.ifc2x3tc1.IfcBuilding;
-import org.bimserver.models.ifc2x3tc1.IfcElementQuantity;
-import org.bimserver.models.ifc2x3tc1.IfcQuantityVolume;
-import org.bimserver.models.ifc2x3tc1.IfcRelDefinesByProperties;
+import org.bimserver.models.ifc2x3tc1.*;
 import org.bimserver.plugins.PluginConfiguration;
 import org.bimserver.plugins.deserializers.DeserializeException;
 import org.bimserver.plugins.serializers.SerializerException;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class TestReadAddWrite {
+public class Ifc2x3StepNonStreamingTests {
+	// tests for deprecated Ifc2x3tc1StepDeserializer and Ifc2x3tc1StepSerializer
+
 	@Test
-	public void testIfc2x3() throws SerializerException, IfcModelInterfaceException, IOException, DeserializeException {
+	public void testReadAddWrite() throws SerializerException, IfcModelInterfaceException, IOException, DeserializeException {
 		Ifc2x3tc1StepDeserializer deserializer = new Ifc2x3tc1StepDeserializer();
 		PackageMetaData packageMetaData = new PackageMetaData(Ifc2x3tc1Package.eINSTANCE, Schema.IFC2X3TC1, Paths.get("tmp"));
 		deserializer.init(packageMetaData);
@@ -87,4 +84,43 @@ public class TestReadAddWrite {
 		serializer.init(model, null, true); // Put "true" as the last argument in order to generate new express id's
 		serializer.writeToFile(Paths.get("output.ifc"), null);
 	}
+
+	@Test
+	public void testReadModifyWrite() throws IOException, DeserializeException, SerializerException {
+		Ifc2x3tc1StepDeserializer deserializer = new Ifc2x3tc1StepDeserializer();
+		PackageMetaData packageMetaData = new PackageMetaData(Ifc2x3tc1Package.eINSTANCE, Schema.IFC2X3TC1, Paths.get("tmp"));
+		deserializer.init(packageMetaData);
+
+		URL url = new URL("https://raw.githubusercontent.com/opensourceBIM/IFC-files/master/HHS%20Office/construction.ifc");
+		InputStream openStream = url.openStream();
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		IOUtils.copy(openStream, baos);
+		IfcModelInterface model = deserializer.read(new ByteArrayInputStream(baos.toByteArray()), "", baos.size(), null);
+
+		for (IfcWall ifcWall : model.getAllWithSubTypes(IfcWall.class)) {
+			ifcWall.setName(ifcWall.getName() + " Modified");
+		}
+
+		Ifc2x3tc1StepSerializer serializer = new Ifc2x3tc1StepSerializer(new PluginConfiguration());
+		serializer.init(model, null, false);
+		serializer.writeToFile(Paths.get("output.ifc"), null);
+	}
+
+	@Test
+	public void testReadWrite() throws IOException, DeserializeException, SerializerException {
+		Ifc2x3tc1StepDeserializer deserializer = new Ifc2x3tc1StepDeserializer();
+		PackageMetaData packageMetaData = new PackageMetaData(Ifc2x3tc1Package.eINSTANCE, Schema.IFC2X3TC1, Paths.get("tmp"));
+		deserializer.init(packageMetaData);
+
+		URL url = new URL("https://raw.githubusercontent.com/opensourceBIM/IFC-files/master/HHS%20Office/construction.ifc");
+		InputStream openStream = url.openStream();
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		IOUtils.copy(openStream, baos);
+		IfcModelInterface model = deserializer.read(new ByteArrayInputStream(baos.toByteArray()), "", baos.size(), null);
+
+		Ifc2x3tc1StepSerializer serializer = new Ifc2x3tc1StepSerializer(new PluginConfiguration());
+		serializer.init(model, null, false);
+		serializer.writeToFile(Paths.get("output.ifc"), null);
+	}
 }
+

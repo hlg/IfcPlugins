@@ -1,4 +1,4 @@
-package org.bimserver.test;
+package org.bimserver.ifc.step;
 
 /******************************************************************************
  * Copyright (C) 2009-2019  BIMserver.org
@@ -28,7 +28,7 @@ import org.bimserver.plugins.deserializers.DeserializerErrorCode;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class TestHeaderParser {
+public class IfcHeaderParserTests {
 	@Test
 	public void test1() throws DeserializeException, ParseException {
 		IfcHeader ifcHeader = new IfcHeaderParser().parseFileName("('\\\\alpha\\\\macvol\\\\Projects\\\\2006\\\\06006 18 - 40 Mount St\\\\11.0 CAD\\\\11.20 Data Exchange\\\\Sent out\\\\IFC''s\\\\090320\\\\A.BIM.P-090320.ifc','2009-03-20T16:36:54',('Architect'),('Building Designer Office'),'PreProc - EDM 4.5.0033','Windows System','The authorising person')", 0);

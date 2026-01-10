@@ -1,4 +1,4 @@
-package org.bimserver.test;
+package org.bimserver.ifc.step;
 
 /******************************************************************************
  * Copyright (C) 2009-2019  BIMserver.org
@@ -23,7 +23,7 @@ import org.junit.Test;
 
 import junit.framework.Assert;
 
-public class TestStringDecode {
+public class StringDecoderTests {
 	@Test
 	public void testOrder() {
 		try {
