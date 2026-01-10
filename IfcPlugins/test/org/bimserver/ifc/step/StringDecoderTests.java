@@ -21,7 +21,7 @@ import org.bimserver.ifc.step.deserializer.IfcParserWriterUtils;
 import org.bimserver.plugins.deserializers.DeserializeException;
 import org.junit.Test;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 
 public class StringDecoderTests {
 	@Test
