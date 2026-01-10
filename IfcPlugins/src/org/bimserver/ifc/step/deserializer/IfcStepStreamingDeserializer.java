@@ -293,7 +293,7 @@ public abstract class IfcStepStreamingDeserializer implements StreamingDeseriali
 			new IfcHeaderParser().parseFileSchema(fileschema.substring(1, fileschema.length() - 2), ifcHeader, lineNumber);
 
 			String ifcSchemaVersion = ifcHeader.getIfcSchemaVersion();
-			if (!ifcSchemaVersion.toLowerCase().equalsIgnoreCase(schema.getHeaderName().toLowerCase())) {
+			if (!ifcSchemaVersion.equalsIgnoreCase(schema.getHeaderName())) {
 				throw new DeserializeException(DeserializerErrorCode.IFC_SCHEMA_NOT_SUPPORTED_BY_DESERIALIZER, lineNumber, ifcSchemaVersion + " is not supported by this deserializer (" + schema.getHeaderName() + " is)");
 			}
 			ifcHeader.setIfcSchemaVersion(ifcSchemaVersion);
@@ -421,8 +421,7 @@ public abstract class IfcStepStreamingDeserializer implements StreamingDeseriali
 							}
 						}
 					} else {
-						int nextIndex = StringUtils.nextString(realData, lastIndex);
-						lastIndex = nextIndex;
+                        lastIndex = StringUtils.nextString(realData, lastIndex);
 					}
 				} else {
 					if (getPackageMetaData().useForDatabaseStorage(eClass, eStructuralFeature)) {

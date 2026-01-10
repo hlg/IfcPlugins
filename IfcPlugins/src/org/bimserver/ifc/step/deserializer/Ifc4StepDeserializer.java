@@ -26,7 +26,7 @@ import org.bimserver.emf.Schema;
 @Deprecated
 public class Ifc4StepDeserializer extends IfcStepDeserializer {
 
-	public Ifc4StepDeserializer(Schema schema) {
-		super(schema);
+	public Ifc4StepDeserializer() {
+		super(Schema.IFC4);
 	}
 }

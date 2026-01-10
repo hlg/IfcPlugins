@@ -261,8 +261,8 @@ public abstract class IfcStepDeserializer extends EmfDeserializer {
 			new IfcHeaderParser().parseFileSchema(fileschema.substring(1, fileschema.length() - 2), ifcHeader, lineNumber);
 
 			String ifcSchemaVersion = ifcHeader.getIfcSchemaVersion();
-			if (!ifcSchemaVersion.toLowerCase().equalsIgnoreCase(schema.getHeaderName().toLowerCase())) {
-				throw new DeserializeException(DeserializerErrorCode.UNSUPPORTED_IFC_SCHEMA_VERSION, lineNumber, ifcSchemaVersion + " is not supported by this deserializer (" + schema.getHeaderName() + " is)");
+			if (!ifcSchemaVersion.equalsIgnoreCase(schema.getHeaderName())) {
+				throw new DeserializeException(DeserializerErrorCode.IFC_SCHEMA_NOT_SUPPORTED_BY_DESERIALIZER, lineNumber, ifcSchemaVersion + " is not supported by this deserializer (" + schema.getHeaderName() + " is)");
 			}
 			ifcHeader.setIfcSchemaVersion(ifcSchemaVersion);
 		} else if (line.startsWith("ENDSEC;")) {

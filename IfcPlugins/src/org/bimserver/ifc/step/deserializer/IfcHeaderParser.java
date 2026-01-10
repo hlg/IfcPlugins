@@ -55,11 +55,14 @@ public class IfcHeaderParser {
 		SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd'T'kk:mm:ss");
 
 		StepParser stepParser = new StepParser(line);
-		ifcHeader.setFilename(stepParser.readNextString(lineNumber));
+		String fileName = stepParser.readNextString(lineNumber);
+		// TODO null fileName allowed (undefined, '$' in SPF)?
+		ifcHeader.setFilename(fileName);
+		String dateTime = stepParser.readNextString(lineNumber);
 		try {
-			ifcHeader.setTimeStamp(dateFormatter.parse(stepParser.readNextString(lineNumber)));
+			ifcHeader.setTimeStamp(dateFormatter.parse(dateTime));
 		} catch (ParseException e) {
-			throw new DeserializeException(DeserializerErrorCode.INVALID_DATETIME_LITERAL, "Datetime parse error", e);
+			throw new DeserializeException(DeserializerErrorCode.INVALID_DATETIME_LITERAL, "Datetime parse error: " + dateTime + ", format should be yyyy-MM-dd'T'kk:mm:ss", e);
 		}
 		StepParser startList = stepParser.startList();
 		while (startList.hasMoreListItems()) {
