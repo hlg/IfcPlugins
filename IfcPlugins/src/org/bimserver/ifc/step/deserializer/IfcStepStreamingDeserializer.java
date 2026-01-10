@@ -246,9 +246,16 @@ public abstract class IfcStepStreamingDeserializer implements StreamingDeseriali
 				mode = Mode.FOOTER;
 				waitingList.dumpIfNotEmpty();
 			} else {
-				if (line.length() > 0 && line.charAt(0) == '#') {
-					while (line.endsWith("*/")) {
-						line = line.substring(0, line.lastIndexOf("/*")).trim();
+				if (!line.isEmpty() && line.charAt(0) == '#') {
+					while (line.contains("/*")){
+						int commentStart = line.indexOf("/*");  // comment start inclusive
+						int commentEnd = line.indexOf("*/", commentStart+2) + 2; // comment end exclusive
+						if(commentEnd<0){
+
+							LOGGER.warn("/* not closed within same line, possibly unhandled multiline comment?");
+							break;
+						}
+						line = line.substring(0, commentStart).trim() + line.substring(commentEnd).trim();
 					}
 					if (line.endsWith(";")) {
 						processRecord(line);
